@@ -157,3 +157,6 @@ AUTH_USER_MODEL = 'assessments.User'
 #Password validators has none here
 AUTH_PASSWORD_VALIDATORS = []
 
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+}
