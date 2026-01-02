@@ -1,23 +1,18 @@
-from django.shortcuts import render, get_object_or_404
+# Django imports
+from django.shortcuts import get_object_or_404
 
 # Third-party imports
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 # Local app imports
-from .serializers import (
-    RegisterSerializer,
-    ExamSerializer,
-    QuestionSerializer,
-    SubmissionAnswerSerializer,
-    SubmitExamSerializer,
-    SubmissionSerializer
-)
-from .models import User, Exam, Question, Submission, SubmissionAnswer
+from .models import Exam, Question, Submission, SubmissionAnswer, User
+from .serializers import RegisterSerializer, ExamSerializer , SubmitExamSerializer, SubmissionSerializer
 from .grading.grader import grade_text
 
 
@@ -46,9 +41,7 @@ def register_view(request):
     return Response({"error": serializer.errors}, status=400)
 
 
-# --------------------------------------
-# List all Exams
-# --------------------------------------
+
 @swagger_auto_schema(
     method='get',
      tags=['Exam List'],

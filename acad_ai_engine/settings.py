@@ -44,6 +44,7 @@ INSTALLED_APPS = [
      'rest_framework_simplejwt',
        'corsheaders',
         'drf_yasg',
+           'rest_framework_simplejwt.token_blacklist',
 
 ]
 
@@ -146,10 +147,11 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),   # token lasts 1 hour
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # refresh token lasts 7 days
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),   
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
-
 
 
 AUTH_USER_MODEL = 'assessments.User'
