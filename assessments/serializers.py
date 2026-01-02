@@ -16,6 +16,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField(required=True)
+
 # ---------- QUESTIONS ----------
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:

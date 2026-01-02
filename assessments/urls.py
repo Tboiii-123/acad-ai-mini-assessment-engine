@@ -12,6 +12,8 @@ urlpatterns = [
     path('exam_detail/<int:pk>/',views.exam_detail , name='exam_detail'),
     path('submit_exam/<int:exam_id>/',views.submit_exam , name='submit_exam'),
     path('view_submission/',views.view_submission , name='view_submit'),
+     path('logout/', views.logout, name='logout'),
+
     
     
        

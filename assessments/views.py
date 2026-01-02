@@ -6,19 +6,22 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 # Local app imports
 from .models import Exam, Question, Submission, SubmissionAnswer, User
-from .serializers import RegisterSerializer, ExamSerializer , SubmitExamSerializer, SubmissionSerializer
+from .serializers import RegisterSerializer, ExamSerializer , SubmitExamSerializer, SubmissionSerializer,LogoutSerializer
 from .grading.grader import grade_text
+
 
 
 @swagger_auto_schema(
     method='post',
     request_body=RegisterSerializer,
+     tags=['auth'],
     
     responses={
         201: openapi.Response(
@@ -44,7 +47,7 @@ def register_view(request):
 
 @swagger_auto_schema(
     method='get',
-     tags=['Exam List'],
+     tags=['Exam Details'],
     responses={
         200: openapi.Response(
             description="List of exams",
@@ -58,7 +61,7 @@ def register_view(request):
 def exam_list(request):
     exams = Exam.objects.prefetch_related('questions').all()
     serializer = ExamSerializer(exams, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data,status=200)
 
 
 
@@ -79,14 +82,14 @@ def exam_list(request):
 def exam_detail(request, pk):
     exam = get_object_or_404(Exam.objects.prefetch_related('questions'), id=pk)
     serializer = ExamSerializer(exam)
-    return Response(serializer.data)
+    return Response(serializer.data,status=200)
 
 
 
 @swagger_auto_schema(
     method='post',
     request_body=SubmitExamSerializer,
-     tags=['Submit Exam'],
+     tags=['Exam Details'],
     responses={
         200: openapi.Response(
             description="Exam submitted successfully",
@@ -153,11 +156,11 @@ def submit_exam(request, exam_id):
     return Response({
         "submission_id": submission.id,
         "score": submission.score
-    })
+    },status=200)
 
 @swagger_auto_schema(
     method='get',
-     tags=['View Submission'],
+     tags=['Exam Details'],
     responses={
         200: openapi.Response(
             description="List of user's submissions",
@@ -171,4 +174,27 @@ def submit_exam(request, exam_id):
 def view_submission(request):
     user_submissions = Submission.objects.select_related('exam').filter(student=request.user)
     serializer = SubmissionSerializer(user_submissions, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data,status=200)
+
+
+
+@swagger_auto_schema(
+    method='post',
+    request_body=LogoutSerializer,
+    tags=['auth'],
+    responses={
+        200: openapi.Response('Logout successful'),
+        400: openapi.Response('Bad request, token invalid or missing')
+    },
+    operation_description="Log out the user by blacklisting their refresh token."
+)
+@api_view(['POST'])
+def logout(request):
+ 
+    try:
+        refresh_token = request.data.get("refresh")
+        token = RefreshToken(refresh_token)
+        token.blacklist()  
+        return Response({"detail": "Logout successful"},status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
