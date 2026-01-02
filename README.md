@@ -1,7 +1,3 @@
-Alright 👍
-Here’s a **clean, professional README.md** you can use for your project. I’ve written it in a way that fits a **Django REST exam/CBT system with grading logic (including TF-IDF option)** and is **GitHub-ready**.
-
-You can copy-paste this directly into `README.md`.
 
 ---
 
@@ -40,15 +36,28 @@ The system supports **objective questions** and can be extended to support **tex
 ## 📂 Project Structure (Simplified)
 
 ```
-project/
+acad_ai_engine/
 │
-├── auth/                # Authentication (register, login)
-├── exams/               # Exams, questions, submissions
-├── submissions/         # User exam attempts & grading
+├── acad_ai_engine/          # Django project settings
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+│
+├── assessments/             # Main application
+│   ├── models.py
+│   ├── serializers.py
+│   ├── views.py
+│   ├── urls.py
+│   │
+│   ├── grading/
+│   │   ├── __init__.py
+│   │   └── grader.py        # AI/Text grading logic
+│
 ├── manage.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
 ```
 
 ---
@@ -66,10 +75,10 @@ project/
 
 | Method | Endpoint              | Description                  |
 | ------ | --------------------- | ---------------------------- |
-| GET    | `/exams/`             | List all exams               |
+| GET    | `/exam_list/`             | List all exams               |
 | GET    | `/exam_detail/{id}/`  | Get exam details + questions |
-| POST   | `/exams/{id}/submit/` | Submit exam answers          |
-| GET    | `/submissions/me/`    | View user results            |
+| POST   | `/submit_exam/{id}/` | Submit exam answers          |
+| GET    | `/view_submission/`    | View user results            |
 
 ---
 
@@ -119,8 +128,8 @@ project/
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clonehttps://github.com/Tboiii-123/acad-ai-mini-assessment-engine.git
+cd acad-ai-mini-assessment-engine
 ```
 
 ### 2️⃣ Create Virtual Environment
@@ -152,22 +161,12 @@ python manage.py runserver
 
 ## 🧪 Testing with Postman
 
-* Use **JWT / session authentication**
+* Use **JWT authentication**
 * Test bulk answer submission using JSON
-* Inspect scores and results via `/submissions/me/`
+* Inspect scores and results via `/view_submission/`
 
 ---
 
-## ❌ What NOT to Commit
-
-* `venv/`
-* `__pycache__/`
-* `.env`
-* Database files
-
-These are already handled in `.gitignore`.
-
----
 
 ## 📌 Future Improvements
 
@@ -177,7 +176,6 @@ These are already handled in `.gitignore`.
 * Essay grading with NLP
 * Frontend integration (React / Next.js)
 
----
 
 ## 👨‍💻 Author
 
@@ -186,11 +184,3 @@ Backend Developer | Python & Django
 Focused on scalable APIs and assessment systems
 
 ---
-
-If you want, I can:
-
-* Tailor this README exactly to your **school test task**
-* Add **API request/response examples**
-* Make it **more junior-friendly or more senior-level**
-
-Just tell me 👍
